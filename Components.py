@@ -56,6 +56,14 @@ class SineWaveOscillator(Oscillator):
         return [value,] * Config.Channels
 
 
+class MySineWaveOscillator(Oscillator):
+    def get_value(self, tick):
+        value = math.sin((2.0 * math.pi) * \
+                         ((self.frequency*(1.0+tick/40000.0))/ Config.SampleRate) * \
+                         tick + (64 / math.pi))
+
+        return [value,] * Config.Channels
+
 
 class SquareWaveOscillator(Oscillator):
     def __init__(self, frequency=440.0, duty=0.5):
@@ -94,7 +102,7 @@ class LFO(object):
 
 
 
-class Amplifeir(object):
+class Amplifier(object):
     def __init__(self, source=None, gain=0, attenuate=1.0):
         self.source = source
         self.gain = gain

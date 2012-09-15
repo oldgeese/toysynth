@@ -4,7 +4,7 @@ import math
 from Components import Config
 from Components import Clock
 from Components import Mixer
-from Components import Amplifeir
+from Components import Amplifier
 
 
 class MMLCompiler(object):
@@ -126,7 +126,7 @@ class Sequencer(object):
 
 
     def add_track(self, track_id, track_name, input_component, output_component):
-        output_component = Amplifeir(source=output_component,
+        output_component = Amplifier(source=output_component,
                                      gain=Config.MaxGain,
                                      attenuate=0.5)
         self.tracks[track_id] = (track_name, input_component, output_component)

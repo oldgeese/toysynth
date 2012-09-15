@@ -1,7 +1,7 @@
 class Vibrato(object):
     def __init__(self, source=None, frequency=1.0, depth=1.0):
         viv_oscillator = SineWaveOscillator(frequency=frequency)
-        amp = Amplifeir(source=viv_oscillator, gain=depth, attenuate=1.0)
+        amp = Amplifier(source=viv_oscillator, gain=depth, attenuate=1.0)
         self.output = FrequencyModulator(source=source, diff=amp)
 
     def get_value(self, tick):

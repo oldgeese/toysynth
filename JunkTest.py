@@ -14,7 +14,7 @@ from Components import Inverter
 from Components import Gate
 from Components import FrequencyModulator
 from Components import Mixer
-from Components import Amplifire
+from Components import Amplifier
 from Components import Renderer
 from Components import WaveFileSink
 
@@ -23,7 +23,7 @@ from Sequencer import Sequencer
 
 def percusstion_test():
     bass_base = Subtraction(SineWaveOscillator(frequency=40.0),
-                            Amplifire(source=SquareWaveOscillator(frequency=80.0, duty=0.125),
+                            Amplifier(source=SquareWaveOscillator(frequency=80.0, duty=0.125),
                                       gain=1,
                                       attenuate=0.075))
 
@@ -42,7 +42,7 @@ def percusstion_test():
     mixer.add_track(1, "snare_drum", snare_drum)
     mixer.add_track(2, "hihat", hihat)
 
-    amplifire = Amplifire(source=mixer, gain=Config.ValueRange[0], attenuate=1.0)
+    amplifire = Amplifier(source=mixer, gain=Config.ValueRange[0], attenuate=1.0)
     sink = WaveFileSink(output_file_name="output.wav")
     clock = Clock(end=Config.SampleRate * 3)
 
@@ -63,7 +63,7 @@ def chorus_test():
     mixer.add_track(0, "base_tone", Gate(source=osc1, state=(True, False)))
     mixer.add_track(1, "detuned_tone", Gate(source=osc2, state=(True, True)))
 
-    amplifire = Amplifire(source=mixer, gain=Config.MaxGain, attenuate=0.75)
+    amplifire = Amplifier(source=mixer, gain=Config.MaxGain, attenuate=0.75)
     sink = WaveFileSink(output_file_name="output.wav")
     clock = Clock(end=Config.SampleRate)
 
@@ -71,7 +71,7 @@ def chorus_test():
     renderer.do_rendering()
 
 
-class Tone(object):
+class Tone(object): # ステレオコーラス
     def __setattr__(self, name, value):
         if name == "frequency":
             self.osc1.frequency = value
@@ -129,8 +129,8 @@ def compiler_test():
 
 
 def main():
-    # percusstion_test()
-    compiler_test()
+    percusstion_test()
+    #compiler_test()
 
 
 if __name__ == "__main__":
