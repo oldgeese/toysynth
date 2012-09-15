@@ -4,10 +4,3 @@
 Rydeen.py
 *.wav
 .gitignore~
-
-
-.gitignore~
-
-Sequencer.pyc
-
-output.wav
