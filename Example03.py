@@ -6,15 +6,15 @@ class Vibrato(object):
 
     def get_value(self, tick):
         return self.output.get_value(tick)
-    
-    
+
+
 
 class DeTunedSquareWaveOscillator(object):
     def __init__(self, frequency=0, depth=0):
         self.depth = depth
         self.osc1 = SquareWaveOscillator(frequency=frequency)
         self.osc2 = SquareWaveOscillator(frequency=frequency + depth)
-        
+
         self.mixer = Mixer()
         self.mixer.add_track(0, "base_tone", self.osc1)
         self.mixer.add_track(1, "detuned_tone", self.osc2)
@@ -31,6 +31,6 @@ class DeTunedSquareWaveOscillator(object):
     def set_frequency(self, value):
         self.osc1.frequency = value
         self.osc2.frequency = value + self.depth
-        
+
     frequency = property(get_frequency, set_frequency)
-    
+

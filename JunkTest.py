@@ -32,7 +32,7 @@ def percusstion_test():
 
     snare_drum = Multiplication(NoiseGenerator(frequency=6000.0),
                                 LFO(oscillator_class=SawWaveOscillator, frequency=1.0, duty=0.25))
-    
+
     hihat = Multiplication(NoiseGenerator(frequency=44100.0),
                            LFO(oscillator_class=SawWaveOscillator, frequency=4.0, duty=0.25))
 
@@ -41,7 +41,7 @@ def percusstion_test():
     mixer.add_track(0, "bus_drum", bass_drum)
     mixer.add_track(1, "snare_drum", snare_drum)
     mixer.add_track(2, "hihat", hihat)
-    
+
     amplifire = Amplifire(source=mixer, gain=Config.ValueRange[0], attenuate=1.0)
     sink = WaveFileSink(output_file_name="output.wav")
     clock = Clock(end=Config.SampleRate * 3)
@@ -57,7 +57,7 @@ def chorus_test():
                                                   ConstantValueGenerator(2.0),
                                                   LFO(oscillator_class=SineWaveOscillator,
                                                       frequency=3.0))))
-        
+
 
     mixer = Mixer()
     mixer.add_track(0, "base_tone", Gate(source=osc1, state=(True, False)))
@@ -78,12 +78,12 @@ class Tone(object):
             self.osc2.frequency = value
         else:
             object.__setattr__(self, name, value)
-                
-    
+
+
     def __init__(self):
         self.osc1 = SquareWaveOscillator()
         self.osc2 = SquareWaveOscillator()
-        
+
         mod_osc2 = Inverter(source=FrequencyModulator(source=self.osc2,
                                                   delta=ConstantValueGenerator(2.0)))
 
@@ -94,8 +94,8 @@ class Tone(object):
 
     def get_value(self, tick):
         return self.mixer.get_value(tick)
-        
-        
+
+
 
 
 def compiler_test():
@@ -105,33 +105,33 @@ def compiler_test():
             "f.r32f.r32f.r32f.r32r4f.r32f.r32f.r32f.r32r4"
             "f.r32f.r32f.r32f.r32r4f.r32f.r32f.r32f.r32r4"
             "f.r32f.r32f.r32f.r32r8f1r8")
-    
-    
+
+
     mml_compiler = MMLCompiler()
     sequences = [mml_compiler.to_sequence(mml) for mml in mmls]
     tones = [Tone(), Tone(), SquareWaveOscillator()]
-                    
+
     seq = Sequencer()
     seq.add_track(0, "track_0", tones[0], tones[0])
     seq.add_track(1, "track_1", tones[1], tones[1])
     seq.add_track(2, "track_3", tones[2], tones[2])
-    
+
     seq.add_sequence(0, sequences[0])
     seq.add_sequence(1, sequences[1])
     seq.add_sequence(2, sequences[2])
-    
+
     sink = WaveFileSink(output_file_name="output.wav")
     clock = Clock()
 
     renderer = Renderer(clock=clock, source=seq, sink=sink)
     renderer.do_rendering()
 
-        
+
 
 def main():
     # percusstion_test()
     compiler_test()
-    
+
 
 if __name__ == "__main__":
     main()

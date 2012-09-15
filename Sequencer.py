@@ -71,12 +71,12 @@ class MMLCompiler(object):
 
                 # 音量指示をアッテネーター値に計算
                 attenuate = 0.0 if cut_off else (self.volume / 15.0)
-                    
+
                 # シーケンスに記録
                 sequence.append((attenuate, note_frequency, int(self.tick_position)))
                 read_position += note_match.end()
                 continue
-            
+
 
             # コマンド系文字の処理
             command_match = self.command_pattern.search(mml[read_position:])
@@ -86,7 +86,7 @@ class MMLCompiler(object):
                 if command_letter == "t":
                     # テンポ
                     self.tempo = int(value)
-                    
+
                 elif command_letter == "v":
                     # ボリューム
                     self.volume = int(value)
@@ -133,7 +133,7 @@ class Sequencer(object):
         self.mixer.add_track(track_id, track_name, output_component)
         self.sequences[track_id] = list()
 
-        
+
     def add_sequence(self, track_id, sequence_data):
         self.sequences[track_id].extend(sequence_data)
 
@@ -145,7 +145,7 @@ class Sequencer(object):
 
             if len(sequence_data) == 0:
                 return None
-            
+
             (attenuate, frequency, off_tick) = sequence_data[0]
             (track_name, input_component, output_component) = self.tracks[track_id]
 
@@ -153,7 +153,7 @@ class Sequencer(object):
             output_component.attenuate = attenuate
 
         return self.mixer.get_value(tick)
-            
-            
-            
-                
+
+
+
+

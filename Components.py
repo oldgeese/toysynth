@@ -31,14 +31,14 @@ class ConstantValueGenerator(object):
 
     def get_value(self, tick):
         return [self.value,] * Config.Channels
-    
+
 
 
 class NoiseGenerator(Oscillator):
     def __init__(self, frequency=44100):
         super(self.__class__, self).__init__(frequency=frequency)
         self.current_value = random.uniform(-1.0, 1.0)
-        
+
     def get_value(self, tick):
         if (tick % (Config.SampleRate / self.frequency)) == 0:
             self.current_value = random.uniform(-1.0, 1.0)
@@ -52,7 +52,7 @@ class SineWaveOscillator(Oscillator):
         value = math.sin((2.0 * math.pi) * \
                          (self.frequency / Config.SampleRate) * \
                          tick + (64 / math.pi))
-        
+
         return [value,] * Config.Channels
 
 
@@ -61,7 +61,7 @@ class SquareWaveOscillator(Oscillator):
     def __init__(self, frequency=440.0, duty=0.5):
         super(self.__class__, self).__init__(frequency=frequency, duty=duty)
         self.current_value = 1
-        
+
     def get_value(self, tick):
         l = Config.SampleRate / self.frequency
         change_point = l * self.duty
@@ -91,7 +91,7 @@ class LFO(object):
     def get_value(self, tick):
         value = (self.oscillator.get_value(tick)[0] + 1) / 2.0
         return value
-    
+
 
 
 class Amplifeir(object):
@@ -108,7 +108,7 @@ class Amplifeir(object):
             value = min((Config.ValueRange[0], value))
             value = max((Config.ValueRange[1], value))
             gained_values.append(value)
-            
+
         return [value * self.attenuate for value in gained_values]
 
 
@@ -124,8 +124,8 @@ class Compressor(object):
         for value in self.soruce.get_value(tick):
             if value >= self.threshold:
                 pass
-                
-        
+
+
 class Clock(object):
     def __init__(self, end=None):
         self.tick = -1
@@ -149,7 +149,7 @@ class Multiplication(object):
     def get_value(self, tick):
         multiplicand_value = self.multiplicand.get_value(tick)
         multiplicator_value = self.multiplicator.get_value(tick)
-        
+
         return [value * multiplicator_value for value in multiplicand_value]
 
 
@@ -187,7 +187,7 @@ class FrequencyModulator(object):
     def __init__(self, source=None, delta=None):
         self.source = source
         self.delta = delta
-        
+
 
     def get_value(self, tick):
         detuning = self.delta.get_value(tick)[0]
@@ -224,12 +224,12 @@ class Renderer(object):
 
     def do_rendering(self):
         self.sink.open()
-        
+
         while True:
             tick = self.clock.next()
             if tick is None:
                 break
-            
+
             data = self.source.get_value(tick)
             if data is None:
                 break
