@@ -22,7 +22,7 @@ class MMLCompiler(object):
                           "b-": 1, "b": 2, "r": None}
 
         self.note_pattern = re.compile(r"^([a-g]|r)(\+|\#|\-)?(\d+)?(\.)?", re.IGNORECASE)
-        self.command_pattern = re.compile(r"^(t|l|v|o)(\d+)", re.IGNORECASE)
+        self.command_pattern = re.compile(r"^(t|l|v|o)(\d+)(\.)?", re.IGNORECASE)
         self.octave_up_down_pattern = re.compile(r"(\<|\>)")
 
 
@@ -81,7 +81,7 @@ class MMLCompiler(object):
             # コマンド系文字の処理
             command_match = self.command_pattern.search(mml[read_position:])
             if command_match:
-                (command_letter, value) = command_match.groups()
+                (command_letter, value, period) = command_match.groups()
 
                 if command_letter == "t":
                     # テンポ
@@ -94,6 +94,8 @@ class MMLCompiler(object):
                 elif command_letter == "l":
                     # 既定音長
                     self.on_length = int(value)
+                    if period:
+                        self.on_length *= 1.5
 
                 elif command_letter == "o":
                     # オクターブ(絶対指定)
